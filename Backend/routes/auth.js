@@ -71,7 +71,7 @@ res.send("cookie set succesfully")
 
 })
 router.get('/clear-cookie', (request, response) => {
-    response.clearCookie('isLoggedin', { path: '/shp/auth/login' })
+    response.clearCookie('isLoggedin')
     response.send('Cookie cleared');
 });
 

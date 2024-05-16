@@ -1,7 +1,13 @@
+
+import Section1 from './Homejs/Section1'
+import NewProducts from './Homejs/New_products'
+import Footer from './Homejs/Footer';
+import Carousel from './Homejs/carousel';
 import React, { useContext, useEffect, useState } from 'react'
-import similarImgaesContext from '../Context/similarImgaesContext'
+
 import { useNavigate } from 'react-router-dom';
-import { AlertContext } from '../Context/AlertState';
+import { AlertContext } from '../../Context/AlertState';
+import similarImgaesContext from '../../Context/similarImgaesContext';
 
 function Home({data}) {
   const context=useContext(similarImgaesContext)
@@ -12,7 +18,7 @@ function Home({data}) {
     if(!loginverification){
       console.log("Login is ",loginverification)
       navigate("/login")
-      Managealert("Please Login","error")
+      // Managealert("Please Login","error")
 
       
     }

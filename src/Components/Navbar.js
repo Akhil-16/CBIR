@@ -1,47 +1,72 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react';
+import './Navbar.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AlertContext } from '../Context/AlertState';
+function Navbar({onImageData}) {
+  const navigate = useNavigate();
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const {Managealert}=useContext (AlertContext)
 
-const Navbar = () => {
+useEffect(() => {
+  console.log("selected photo is ",selectedPhoto)
+  
+}, [selectedPhoto])
+
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedPhoto(file);
+  };
+
+  const sendPhotoToAPI = async () => {
+    try {
+      if (selectedPhoto) {
+        const formData = new FormData();
+        formData.append('photo', selectedPhoto);
+        onImageData (formData)
+        
+        // const response = await fetch(' http://127.0.0.1:5000/upload', {
+        //   method: 'POST',
+        //   body: formData
+        // });
+
+        // if (response.ok) {
+        //   console.log('Photo uploaded successfully!');
+        // } else {
+        //   console.error('Error uploading photo:', response.statusText);
+        // }
+      } else {
+        console.log('No photo selected.');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  const logout=async()=>{
+    let x=await axios.get("http://localhost:8081/api/auth/clear-cookie",{ withCredentials:true})
+    console.log("logout ",x.data)
+    window.location.reload()
+    Managealert("Logged Out","Success")
+    
+   
+  }
+
+
   return (
-  <>
-  <nav className="navbar navbar-expand-lg bg-body-tertiary">
-  <div className="container-fluid">
-    <a className="navbar-brand" href="#">Navbar</a>
-    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-        <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Link</a>
-        </li>
-        <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul className="dropdown-menu">
-            <li><a className="dropdown-item" href="#">Action</a></li>
-            <li><a className="dropdown-item" href="#">Another action</a></li>
-            <li><hr className="dropdown-divider" /></li>
-
-            <li><a className="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form className="d-flex" role="search">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button className="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-  </>
-  )
+    <nav className="navbar">
+      <div className="logo">Shopiy</div>
+      <input type="text" className="search-bar" placeholder="Search..." />
+      <div className="nav-icons">
+        <label htmlFor="photo-upload" className="upload-label">
+          Insert Photo
+          <input type="file" id="photo-upload" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
+        </label>
+        <button onClick={sendPhotoToAPI}>Upload</button>
+        <button onClick={logout}> Logout</button>
+        
+      </div>
+    </nav>
+  );
 }
 
-export default Navbar
+export default Navbar;

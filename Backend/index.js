@@ -9,8 +9,8 @@ app.use("*",cors({
     origin:true,
     credentials:true
 }))
-app.use("/shp/auth",require('./routes/auth'))
-app.use("/shp/auth",require('./routes/shopping'))
+app.use("/api/auth",require('./routes/auth'))
+app.use("/api/shp",require('./routes/shopping'))
 
 
 app.listen(8081,()=>{
